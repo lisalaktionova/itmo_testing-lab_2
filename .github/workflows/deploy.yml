@@ -9,6 +9,13 @@ permissions:
   pages: write
   id-token: write
 
+<<<<<<< HEAD
+=======
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+>>>>>>> 3a25442 (Добавлен GitHub Actions для деплоя)
 jobs:
   deploy:
     environment:
@@ -30,3 +37,7 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3a25442 (Добавлен GitHub Actions для деплоя)
