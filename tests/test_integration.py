@@ -28,14 +28,14 @@ class TestBlogAPIIntegration:
     
     def test_create_and_retrieve_post(self, client):
         """Тест интеграции: создание поста и его получение"""
-        # Создание поста через API
+        #создание поста через API
         post_data = {
             'title': 'Test Post',
             'content': 'This is a test content',
             'author': 'Test Author'
         }
         
-        # Тест 1: Успешное создание поста
+        #тест 1: Успешное создание поста
         response = client.post('/posts', 
                              data=json.dumps(post_data),
                              content_type='application/json')
@@ -45,7 +45,7 @@ class TestBlogAPIIntegration:
         assert 'id' in data
         post_id = data['id']
         
-        # Тест 2: Получение созданного поста
+        #тест 2: Получение созданного поста
         response = client.get(f'/posts/{post_id}')
         assert response.status_code == 200
         post = json.loads(response.data)
