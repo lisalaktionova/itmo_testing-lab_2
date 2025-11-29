@@ -24,7 +24,7 @@ def client():
     clear_db()
 
 class TestBlogAPIIntegration:
-    """Интеграционные тесты для Blog API"""
+    """Интеграционные тесты"""
     
     def test_create_and_retrieve_post(self, client):
         """Тест интеграции: создание поста и его получение"""
@@ -57,10 +57,10 @@ class TestBlogAPIIntegration:
     
     def test_create_post_validation(self, client):
         """Тест интеграции: проверка валидации данных"""
-        # Тест 3: Попытка создания поста с неполными данными
+        #тест 3: Попытка создания поста с неполными данными
         invalid_data = {
             'title': 'Incomplete Post'
-            # Отсутствуют content и author
+            #отсутствуют content и author
         }
         
         response = client.post('/posts',
@@ -73,7 +73,7 @@ class TestBlogAPIIntegration:
     
     def test_get_nonexistent_post(self, client):
         """Тест интеграции: попытка получения несуществующего поста"""
-        # Тест 4: Запрос несуществующего поста
+        #тест 4: Запрос несуществующего поста
         response = client.get('/posts/9999')
         assert response.status_code == 404
         data = json.loads(response.data)
@@ -81,42 +81,39 @@ class TestBlogAPIIntegration:
     
     def test_post_lifecycle(self, client):
         """Тест интеграции: полный жизненный цикл поста"""
-        # Создание поста
+        #создание поста
         post_data = {
             'title': 'Lifecycle Post',
             'content': 'Testing full lifecycle',
             'author': 'Test User'
-        }
-        
+        } 
         response = client.post('/posts',
                              data=json.dumps(post_data),
                              content_type='application/json')
         assert response.status_code == 201
         post_id = json.loads(response.data)['id']
         
-        # Получение списка всех постов
+        #получение списка всех постов
         response = client.get('/posts')
         assert response.status_code == 200
         posts = json.loads(response.data)
         assert len(posts) == 1
         assert posts[0]['id'] == post_id
         
-        # Тест 5: Удаление поста
+        #тест 5: Удаление поста
         response = client.delete(f'/posts/{post_id}')
         assert response.status_code == 200
         
-        # Проверка, что пост удален
+        #проверка, что пост удален
         response = client.get(f'/posts/{post_id}')
         assert response.status_code == 404
     
     def test_multiple_posts_operations(self, client):
         """Тест интеграции: работа с несколькими постами"""
-        # Создание нескольких постов
+        #создание нескольких постов
         posts_data = [
             {'title': f'Post {i}', 'content': f'Content {i}', 'author': f'Author {i}'}
-            for i in range(3)
-        ]
-        
+            for i in range(3)]
         created_ids = []
         for post_data in posts_data:
             response = client.post('/posts',
@@ -125,13 +122,13 @@ class TestBlogAPIIntegration:
             assert response.status_code == 201
             created_ids.append(json.loads(response.data)['id'])
         
-        # Проверка получения всех постов
+        #проверка получения всех постов
         response = client.get('/posts')
         assert response.status_code == 200
         posts = json.loads(response.data)
         assert len(posts) == 3
         
-        # Проверка корректности данных
+        #проверка корректности данных
         for i, post in enumerate(posts):
             assert post['title'] == f'Post {i}'
             assert post['content'] == f'Content {i}'
